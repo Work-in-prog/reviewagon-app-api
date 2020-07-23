@@ -4,7 +4,7 @@ class Stroller < ApplicationRecord
     before_create :slugify
 
     def slugify
-        self.slug = name.paramerterize
+        self.slug = name.parameterize
     end
 
     def average_score
