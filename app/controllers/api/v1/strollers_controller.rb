@@ -5,26 +5,29 @@ module Api
         
         # GET /strollers
         def index
-          strollers = Stroller.all
-          render json: StrollerSerializer.new(strollers, options).serialized_json
+          @strollers = Stroller.all
+          render json: StrollerSerializer.new(@strollers, options).serialized_json
         end
         
         # GET /strollers/1
         def show
-          stroller = Stroller.find_by(slug: params[:slug])
-          render json: StrollerSerializer.new(stroller, options).serialized_json
+          @stroller = Stroller.find_by(slug: params[:slug])
+          render json: StrollerSerializer.new(@stroller, options).serialized_json
         end
   
         # POST /strollers
         def create
-          stroller = Stroller.new(stroller_params)
+            
+          @stroller = Stroller.new(stroller_params)
+        #   render plain: params[:stroller].inspect
   
-          if stroller.save
-            # render plain: params[:stroller].inspect
-            # render(json: { stroller: stroller }, status: 201)
-            render json: StrollerSerializer.new(stroller).serialized_json
+          if @stroller.save
+           
+            render json: StrollerSerializer.new(@stroller).serialized_json
+            #  render json:@stroller, status: :created, location: @stroller
+
           else
-            render json: stroller.errors, status: :unprocessable_entity
+            render json: @stroller.errors, status: :unprocessable_entity
           end
         end
   
@@ -52,7 +55,7 @@ module Api
   
         # Only allow a trusted parameter "white list" through.
         def stroller_params
-          params.required(:stroller).permit(:name, :image_url)
+          params.required(:stroller).permit(:name, :image_url, :slug)
         end
       end
     end
