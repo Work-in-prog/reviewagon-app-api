@@ -20,6 +20,8 @@ module Api
           stroller = Stroller.new(stroller_params)
   
           if stroller.save
+            # render plain: params[:stroller].inspect
+            # render(json: { stroller: stroller }, status: 201)
             render json: StrollerSerializer.new(stroller).serialized_json
           else
             render json: stroller.errors, status: :unprocessable_entity
@@ -45,12 +47,12 @@ module Api
         private
         # Use callbacks to share common setup or constraints between actions.
         def options
-          @options ||= { include: %i[reviews]}
+          @options ||= { include: %i[reviews] }
         end
   
         # Only allow a trusted parameter "white list" through.
         def stroller_params
-          params.require(:stroller).permit(:name, :image_url)
+          params.required(:stroller).permit(:name, :image_url)
         end
       end
     end
