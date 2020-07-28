@@ -55,7 +55,7 @@ module Api
   
         # Only allow a trusted parameter "white list" through.
         def stroller_params
-          params.required(:stroller).permit(:name, :image_url, :slug)
+          params.required(:stroller).permit(:name, :image_url)
         end
       end
     end
