@@ -44,9 +44,14 @@ module Api
   
         # DELETE /strollers/1
         def destroy
-          stroller.destroy
+          stroller = Stroller.find_by(slug: params[:slug])
+
+          if stroller.destroy
+            head :no_content
+          else
+            render json: { errors: stroller.errors }, status: 422
+          end
         end
-  
         private
         # Use callbacks to share common setup or constraints between actions.
         def options

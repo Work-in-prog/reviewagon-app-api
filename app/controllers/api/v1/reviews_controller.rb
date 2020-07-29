@@ -6,7 +6,8 @@ module Api
   
         # POST /reviews
         def create
-          review = Review.new(review_params)
+          review = stroller.reviews.new(review_params)
+         
   
           if review.save
             render json: ReviewSerializer.new(review).serialized_json
@@ -26,10 +27,20 @@ module Api
   
         # DELETE /reviews/1
         def destroy
-          review.destroy
+          review = current_user.reviews.find(params[:id])
+  
+          if review.destroy
+            head :no_content
+          else
+            render json: errors(review), status: 422
+          end
         end
   
         private
+
+        def stroller
+        stroller ||= Stroller.find(params[:stroller_id])
+        end
           # Use callbacks to share common setup or constraints between actions.
           # def set_review
           #   @review = Review.find(params[:id])
@@ -39,5 +50,7 @@ module Api
           def review_params
             params.require(:review).permit(:title, :description, :score, :stroller_id)
           end
+        end
       end
+    end
   
